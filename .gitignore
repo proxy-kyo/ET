@@ -60,3 +60,4 @@ MainPackage.txt
 .omx/
 docs/
 .worktrees/
+.codegraph/
