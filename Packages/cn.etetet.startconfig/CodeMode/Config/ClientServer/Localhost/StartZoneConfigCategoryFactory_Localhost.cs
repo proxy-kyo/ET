@@ -18,7 +18,7 @@ public sealed class StartZoneConfigCategoryFactory_Localhost : IConfigFactory
     {
         return new StartZoneConfigCategory(new System.Collections.Generic.Dictionary<int, ET.Server.StartZoneConfig>()
         {
-            [ 0 ] = new ET.Server.StartZoneConfig(0, 1, @"mongodb://127.0.0.1", @"ET0")
+            [ 0 ] = new ET.Server.StartZoneConfig(0, 1, @"mongodb://root:root@127.0.0.1:47017/?authSource=admin", @"ET0")
         });
     }
 }
