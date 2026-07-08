@@ -1,0 +1,19 @@
+{
+  "name": "cn.etetet.kdemo",
+  "displayName": "ET.KDemo",
+  "version": "4.0.0",
+  "unity": "2022.3",
+  "category": "Demo",
+  "author": {
+    "name": "Kyo"
+  },
+  "relatedPackages": {},
+  "description": "KDemo - skeleton based on cn.etetet.statesync",
+  "dependencies": {
+    "cn.etetet.core": "4.0.0",
+    "cn.etetet.config": "4.0.0",
+    "cn.etetet.proto": "4.0.0",
+    "cn.etetet.unit": "4.0.0",
+    "cn.etetet.loader": "4.0.0"
+  }
+}
