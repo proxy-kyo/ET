@@ -6,7 +6,7 @@ namespace ET.Client
         protected override async ETTask Run(Scene root, KDemoEntryEvent3 args)
         {
             Fiber fiber = root.Fiber;
-            await fiber.CreateFiber(SchedulerType.Parent, IdGenerater.Instance.GenerateId(), SceneType.Client, "Client");
+            await fiber.CreateFiber(SchedulerType.Parent, IdGenerater.Instance.GenerateId(), SceneType.KDemoClient, "KDemoClient");
         }
     }
 }
