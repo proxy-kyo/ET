@@ -492,7 +492,7 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 4352423813013357400, guid: 277bb39aee6d0cf448998ffc180bc178,
         type: 3}
-      propertyPath: 'serializationData.ReferencedUnityObjects.Array.data[8]'
+      propertyPath: serializationData.ReferencedUnityObjects.Array.data[8]
       value: 
       objectReference: {fileID: 7009688225762778117}
     - target: {fileID: 4518843495745780935, guid: 277bb39aee6d0cf448998ffc180bc178,
@@ -661,7 +661,7 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6751856360974923714, guid: 277bb39aee6d0cf448998ffc180bc178,
         type: 3}
-      propertyPath: 'serializationData.ReferencedUnityObjects.Array.data[2]'
+      propertyPath: serializationData.ReferencedUnityObjects.Array.data[2]
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7142915178310409964, guid: 277bb39aee6d0cf448998ffc180bc178,

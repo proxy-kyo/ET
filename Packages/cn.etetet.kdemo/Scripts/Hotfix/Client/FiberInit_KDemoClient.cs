@@ -15,8 +15,9 @@ namespace ET.Client
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<ObjectWait>();
+            root.AddComponent<PlayerComponent>();
 
-            await ETTask.CompletedTask;
+            await EventSystem.Instance.PublishAsync(root, new KDemoClientInitFinish());
         }
     }
 }

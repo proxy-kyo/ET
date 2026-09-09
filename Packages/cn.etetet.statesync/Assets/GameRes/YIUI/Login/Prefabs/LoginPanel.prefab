@@ -865,6 +865,7 @@ GameObject:
   - component: {fileID: 7520718148263010971}
   - component: {fileID: 4596317905338628377}
   - component: {fileID: 282268918692004887}
+  - component: {fileID: 7176037798837689768}
   m_Layer: 5
   m_Name: LoginPanel
   m_TagString: Untagged
@@ -1004,7 +1005,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   ComponentTable: {fileID: 282268918692004887}
-  DataTable: {fileID: 0}
+  DataTable: {fileID: 7176037798837689768}
   EventTable: {fileID: 4596317905338628377}
   PkgName: Login
   ResName: LoginPanel
@@ -1278,6 +1279,47 @@ MonoBehaviour:
       Data: 
   m_AutoSetNullName: 1
   m_NullNameAddTypeName: 0
+--- !u!114 &7176037798837689768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068330716448434226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e653f1c5ec04766b7a16c1a9b9ff51e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_DataDic
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[YIUIFramework.UIData,
+        ET.YIUIFramework]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
 --- !u!1 &7413685547913767975
 GameObject:
   m_ObjectHideFlags: 0

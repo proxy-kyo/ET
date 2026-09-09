@@ -9,8 +9,8 @@ namespace ET.Client
     {
         protected override async ETTask Run(Scene root, Main2NetClient_Login request, NetClient2Main_Login response)
         {
-            string account = request.Account;
-            string password = request.Password;
+            string account = (request.Account ?? string.Empty).Trim();
+            string password = (request.Password ?? string.Empty).Trim();
             // 创建一个ETModel层的Session
             root.RemoveComponent<RouterAddressComponent>();
             // 获取路由跟realmDispatcher地址
@@ -39,6 +39,10 @@ namespace ET.Client
                 c2RLogin.Account = account;
                 c2RLogin.Password = password;
                 r2CLogin = (R2C_Login)await session.Call(c2RLogin);
+                if (r2CLogin.Error != ErrorCode.ERR_Success)
+                {
+                    throw new RpcException(r2CLogin.Error, r2CLogin.Message);
+                }
             }
 
             // 创建一个gate Session,并且保存到SessionComponent中

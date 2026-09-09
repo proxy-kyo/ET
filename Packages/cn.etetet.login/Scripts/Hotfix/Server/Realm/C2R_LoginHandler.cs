@@ -11,6 +11,15 @@ namespace ET.Server
 	{
 		protected override async ETTask Run(Session session, C2R_Login request, R2C_Login response)
 		{
+			request.Account = (request.Account ?? string.Empty).Trim();
+			request.Password = (request.Password ?? string.Empty).Trim();
+			if (request.Account != "kyo" || request.Password != "111111")
+			{
+				response.Error = ErrorCode.ERR_LoginAccountPasswordError;
+				response.Message = "用户名或密码错误";
+				return;
+			}
+
 			EntityRef<Session> sessionRef = session;
 			// 随机分配一个Gate
 			Scene root = session.Root();

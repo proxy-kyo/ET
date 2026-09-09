@@ -15,7 +15,9 @@
 - `Scripts/Model/Share/EntryEvent.cs` — `KDemoEntryEvent1/2/3`
 - `Scripts/Hotfix/Share/FiberInit_KDemo.cs` — `[Invoke(SceneType.KDemo)]` 入口
 - `Scripts/Hotfix/Share/EntryEvent1_InitShare.cs` — Share 初始化
-- `Scripts/Hotfix/Server/EntryEvent2_InitServer.cs` — Server 初始化占位
-- `Scripts/HotfixView/Client/EntryEvent3_InitClient.cs` — Client 初始化占位
+- `Scripts/Hotfix/Server/EntryEvent2_InitServer.cs` — 根据 StartConfig 创建本地服务端纤程
+- `Scripts/HotfixView/Client/EntryEvent3_InitClient.cs` — 创建 KDEMO 客户端纤程
+- `Scripts/HotfixView/Client/KDemoClientInitFinish_CreateLoginView.cs` — 初始化 YIUI 并打开 statesync 的登录面板
 
-未复制 statesync 的美术资源、整套 YIUI 界面、Luban 配置、DotNet 工程。
+登录流程复用 statesync 的 YIUI `LoginPanelComponent` 与 `cn.etetet.login`，成功后关闭登录面板并记录 `PlayerId`；当前不包含进入地图。
+未复制 statesync 的 YIUI 生成代码或 prefab。

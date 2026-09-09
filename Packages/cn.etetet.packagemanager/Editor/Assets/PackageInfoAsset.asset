@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AllLastPackageInfo:
   - Name: com.unity.ide.visualstudio
-    Version: 2.0.27
+    Version: 2.0.28
   - Name: com.unity.ide.rider
-    Version: 3.0.40
+    Version: 3.1.0
   - Name: com.unity.ide.cursor
     Version: 
   - Name: com.halodi.halodi-unity-package-registry-manager
@@ -194,19 +194,19 @@ MonoBehaviour:
   - Name: com.unity.toolchain.win-x86_64-linux-x86_64
     Version: 2.0.11
   - Name: com.unity.timeline
-    Version: 1.8.12
+    Version: 1.8.13
   - Name: com.unity.textmeshpro
     Version: 4.0.0-pre.2
   - Name: com.unity.render-pipelines.universal
     Version: 14.0.12
   - Name: com.unity.recorder
-    Version: 5.1.6
+    Version: 5.1.7
   - Name: com.unity.inputsystem
-    Version: 1.19.0
+    Version: 1.20.0
   - Name: com.unity.cinemachine
     Version: 3.1.7
   - Name: com.unity.ai.navigation
-    Version: 2.0.13
+    Version: 2.0.14
   - Name: com.unity.2d.sprite
     Version: 1.0.0
   - Name: com.coplaydev.unity-mcp
@@ -216,5 +216,5 @@ MonoBehaviour:
   - Name: cn.etetet.kdemo
     Version: 
   BanPackageInfo: []
-  LastUpdateTime: 1783494741
+  LastUpdateTime: 1788917751
   UpdateInterval: 3600

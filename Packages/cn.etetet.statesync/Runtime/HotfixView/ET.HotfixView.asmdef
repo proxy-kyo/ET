@@ -17,6 +17,7 @@
         "ET.YooAssets",
         "Unity.InputSystem",
         "Unity.Mathematics",
+        "Unity.RenderPipelines.Universal.Runtime",
         "Unity.TextMeshPro",
         "ET.HybridCLR"
     ],
