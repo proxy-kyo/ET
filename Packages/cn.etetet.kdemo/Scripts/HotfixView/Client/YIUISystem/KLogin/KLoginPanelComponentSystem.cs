@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -37,10 +37,26 @@ namespace ET.Client
         {
             var acct = self.u_ComAccountTMP_InputField.text;
             var pass = self.u_ComPasswordTMP_InputField.text;
-            Log.Info($"收到 [YIUIInvoke(KLoginPanelComponent.OnEventLoginInvoke)]: {acct}, {pass}");
-            GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
-            await LoginHelper.Login(self.Root(), globalComponent.GlobalConfig.Address, acct, pass);
-            await ETTask.CompletedTask;
+            Scene root = self.Root();
+            EntityRef<KLoginPanelComponent> selfRef = self;
+            string address = root.GetComponent<GlobalComponent>().GlobalConfig.Address;
+            try
+            {
+                await LoginHelper.Login(root, address, acct, pass);
+            }
+            catch (Exception e)
+            {
+                self = selfRef;
+                if (self == null)
+                {
+                    return;
+                }
+
+                string message = e is RpcException rpc && rpc.Error == ErrorCode.ERR_LoginAccountPasswordError
+                    ? "用户名或密码错误"
+                    : "登录失败，请稍后重试";
+                await TipsHelper.Open<TipsTextViewComponent>(self.Root(), message);
+            }
         }
         #endregion YIUIEvent结束
     }
