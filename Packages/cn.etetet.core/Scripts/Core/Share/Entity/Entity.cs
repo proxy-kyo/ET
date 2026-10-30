@@ -662,7 +662,7 @@ namespace ET
         private static Entity Create(Type type, bool isFromPool)
         {
             Entity component = (Entity) ObjectPool.Fetch(type, isFromPool);
-            component.IsFromPool = true;
+            component.IsFromPool = isFromPool;
             component.IsNoDeserializeSystem = true;
             component.Id = 0;
             return component;
