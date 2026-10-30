@@ -2,17 +2,16 @@
 {
     public static partial class GateSessionKeyComponentSystem
     {
-        public static void Add(this GateSessionKeyComponent self, long key, string account)
+        public static void Add(this GateSessionKeyComponent self, long key, string account, long playerId)
         {
-            self.sessionKey.Add(key, account);
+            self.sessionKey.Add(key, (account, playerId));
             self.TimeoutRemoveKey(key).Coroutine();
         }
 
-        public static string Get(this GateSessionKeyComponent self, long key)
+        public static (string Account, long PlayerId) Get(this GateSessionKeyComponent self, long key)
         {
-            string account = null;
-            self.sessionKey.TryGetValue(key, out account);
-            return account;
+            self.sessionKey.TryGetValue(key, out var login);
+            return login;
         }
 
         public static void Remove(this GateSessionKeyComponent self, long key)

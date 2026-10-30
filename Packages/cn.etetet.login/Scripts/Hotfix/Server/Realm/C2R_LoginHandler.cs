@@ -11,12 +11,11 @@ namespace ET.Server
 	{
 		protected override async ETTask Run(Session session, C2R_Login request, R2C_Login response)
 		{
-			request.Account = (request.Account ?? string.Empty).Trim();
-			request.Password = (request.Password ?? string.Empty).Trim();
-			if (request.Account != "kyo" || request.Password != "111111")
+			response.Error = LoginValidator.Validate(request.Account, request.Password, out string name);
+			if (response.Error != ErrorCode.ERR_Success)
 			{
-				response.Error = ErrorCode.ERR_LoginAccountPasswordError;
-				response.Message = "用户名或密码错误";
+				response.Message = response.Error == ErrorCode.ERR_LoginAccountInvalid
+					? "账号须为3–16位小写字母、数字或下划线" : "密码须为6–32位";
 				return;
 			}
 
@@ -24,7 +23,24 @@ namespace ET.Server
 			// 随机分配一个Gate
 			Scene root = session.Root();
 			EntityRef<Scene> rootRef = root;
-			ulong hash = (ulong)request.Account.GetLongHashCode();
+			if (!root.GetComponent<LoginRateLimitComponent>().TryAcquire(session.RemoteAddress.IP,
+				root.GetSingleton<TimeInfo>().ServerNow()))
+			{
+				response.Error = ErrorCode.ERR_LoginTooFrequent;
+				response.Message = "登录过于频繁";
+				return;
+			}
+			DBComponent db = root.GetComponent<DBManagerComponent>().GetZoneDB(root.Zone());
+			(int error, long playerId) = await AccountHelper.LoginOrRegister(db, name, request.Password);
+			if (error != ErrorCode.ERR_Success)
+			{
+				response.Error = error;
+				response.Message = "用户名或密码错误";
+				return;
+			}
+			root = rootRef;
+			session = sessionRef;
+			ulong hash = (ulong)name.GetLongHashCode();
 			
 			ServiceDiscoveryProxy serviceDiscoveryProxy = root.GetComponent<ServiceDiscoveryProxy>();
 
@@ -34,7 +50,8 @@ namespace ET.Server
 			
 			// 向gate请求一个key,客户端可以拿着这个key连接gate
 			R2G_GetLoginKey r2GGetLoginKey = R2G_GetLoginKey.Create();
-			r2GGetLoginKey.Account = request.Account;
+			r2GGetLoginKey.Account = name;
+			r2GGetLoginKey.PlayerId = playerId;
 			response.Address = gateServiceInfo.Metadata[ServiceMetaKey.InnerIPOuterPort];
 			
 			root = rootRef;

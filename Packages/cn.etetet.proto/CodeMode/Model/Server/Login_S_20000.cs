@@ -17,6 +17,8 @@ namespace ET
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public string Account { get; set; }
+        [MemoryPackOrder(2)]
+        public long PlayerId { get; set; }
         public override void Dispose()
         {
             ObjectPool.Recycle(this);

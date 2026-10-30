@@ -285,6 +285,23 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(Opcode.G2C_KickOut)]
+    public partial class G2C_KickOut : MessageObject, IMessage
+    {
+        public static G2C_KickOut Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<G2C_KickOut>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public string Message { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static partial class Opcode
     {
         public const ushort Main2NetClient_Login = 10001;
@@ -299,5 +316,6 @@ namespace ET
         public const ushort G2C_Logout = 10010;
         public const ushort C2G_EnterMap = 10011;
         public const ushort G2C_EnterMap = 10012;
+        public const ushort G2C_KickOut = 10013;
     }
 }

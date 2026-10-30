@@ -9,7 +9,7 @@ namespace ET.Server
         protected override async ETTask Run(Session session, C2G_LoginGate request, G2C_LoginGate response)
         {
             Scene root = session.Root();
-            string account = root.GetComponent<GateSessionKeyComponent>().Get(request.Key);
+            (string account, long playerId) = root.GetComponent<GateSessionKeyComponent>().Get(request.Key);
             if (account == null)
             {
                 response.Error = ErrorCode.ERR_ConnectGateKeyError;
@@ -25,7 +25,7 @@ namespace ET.Server
             
             if (player == null)
             {
-                player = playerComponent.AddChild<Player, string>(account);
+                player = playerComponent.AddChildWithId<Player, string>(playerId, account);
                 EntityRef<Player> playerRef = player;
                 playerComponent.Add(player);
                 PlayerSessionComponent playerSessionComponent = player.AddComponent<PlayerSessionComponent>();
@@ -38,6 +38,14 @@ namespace ET.Server
             }
             else
             {
+                Session oldSession = player.GetComponent<PlayerSessionComponent>().Session;
+                if (oldSession != null && oldSession != session)
+                {
+                    G2C_KickOut kickOut = G2C_KickOut.Create();
+                    kickOut.Message = "账号已在其他连接登录";
+                    oldSession.Send(kickOut);
+                    CloseSession(oldSession).Coroutine();
+                }
                 player.RemoveComponent<WaitLogoutComponent>();
                 session.AddComponent<SessionPlayerComponent>().Player = player;
                 player.GetComponent<PlayerSessionComponent>().Session = session;
@@ -45,6 +53,14 @@ namespace ET.Server
 
             response.PlayerId = player.Id;
             await ETTask.CompletedTask;
+        }
+
+        private static async ETTask CloseSession(Session session)
+        {
+            EntityRef<Session> sessionRef = session;
+            await session.Root().TimerComponent.WaitAsync(1000);
+            session = sessionRef;
+            session?.Dispose();
         }
     }
 }

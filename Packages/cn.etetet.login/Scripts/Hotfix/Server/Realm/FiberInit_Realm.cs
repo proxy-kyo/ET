@@ -9,12 +9,18 @@ namespace ET.Server
     {
         public override async ETTask Handle(FiberInit fiberInit)
         {
+            LogMsg.Instance.AddIgnore(typeof(C2R_Login));
             Scene root = fiberInit.Fiber.Root;
             root.AddComponent<MailBoxComponent, int>(MailBoxType.UnOrderedMessage);
             root.AddComponent<TimerComponent>();
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
+            root.AddComponent<LoginRateLimitComponent>();
+            root.AddComponent<DBManagerComponent>();
+            EntityRef<Scene> rootRef = root;
+            await AccountHelper.CreateIndexes(root.GetComponent<DBManagerComponent>().GetZoneDB(root.Zone()));
+            root = rootRef;
 
             AddressSingleton addressSingleton = root.GetSingleton<AddressSingleton>();
             int outerPort = AddressHelper.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());

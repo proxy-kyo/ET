@@ -18,13 +18,17 @@
                 return;
             }
 
-            player.AddComponent<WaitLogoutComponent>();
+            if (player.GetComponent<PlayerSessionComponent>().SessionRef == self.SessionRef &&
+                player.GetComponent<WaitLogoutComponent>() == null)
+            {
+                player.AddComponent<WaitLogoutComponent>();
+            }
         }
         
         [EntitySystem]
         private static void Awake(this SessionPlayerComponent self)
         {
-
+            self.SessionRef = self.GetParent<Session>();
         }
     }
 }

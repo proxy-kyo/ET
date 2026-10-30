@@ -3,17 +3,17 @@
 	[ComponentOf(typeof(Player))]
 	public class PlayerSessionComponent : Entity, IAwake
 	{
-		private EntityRef<Session> session;
+		public EntityRef<Session> SessionRef;
 
 		public Session Session
 		{
 			get
 			{
-				return this.session;
+				return this.SessionRef;
 			}
 			set
 			{
-				this.session = value;
+				this.SessionRef = value;
 			}
 		}
 	}

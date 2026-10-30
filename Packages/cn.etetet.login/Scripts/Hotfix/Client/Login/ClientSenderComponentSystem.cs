@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace ET.Client
@@ -9,7 +9,8 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this ClientSenderComponent self)
         {
-
+            LogMsg.Instance.AddIgnore(typeof(Main2NetClient_Login));
+            LogMsg.Instance.AddIgnore(typeof(C2R_Login));
         }
         
         [EntitySystem]
@@ -56,7 +57,11 @@ namespace ET.Client
             main2NetClientLogin.Password = password;
             main2NetClientLogin.Address = address;
             
-            NetClient2Main_Login response = await self.Root().GetComponent<ProcessInnerSender>().Call(self.FiberInstanceId, main2NetClientLogin) as NetClient2Main_Login;
+            NetClient2Main_Login response = await self.Root().GetComponent<ProcessInnerSender>().Call(self.FiberInstanceId, main2NetClientLogin, false) as NetClient2Main_Login;
+            if (response.Error != ErrorCode.ERR_Success)
+            {
+                throw new RpcException(response.Error, response.Message);
+            }
             
             return response.PlayerId;
         }

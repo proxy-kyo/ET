@@ -10,7 +10,7 @@ namespace ET.Client
         protected override async ETTask Run(Scene root, Main2NetClient_Login request, NetClient2Main_Login response)
         {
             string account = (request.Account ?? string.Empty).Trim();
-            string password = (request.Password ?? string.Empty).Trim();
+            string password = request.Password ?? string.Empty;
             // 创建一个ETModel层的Session
             root.RemoveComponent<RouterAddressComponent>();
             // 获取路由跟realmDispatcher地址
@@ -41,7 +41,9 @@ namespace ET.Client
                 r2CLogin = (R2C_Login)await session.Call(c2RLogin);
                 if (r2CLogin.Error != ErrorCode.ERR_Success)
                 {
-                    throw new RpcException(r2CLogin.Error, r2CLogin.Message);
+                    response.Error = r2CLogin.Error;
+                    response.Message = r2CLogin.Message;
+                    return;
                 }
             }
 

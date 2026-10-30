@@ -101,3 +101,8 @@ message G2C_EnterMap // ISessionResponse
 	/// 自己的UnitId
 	int64 MyId = 4;
 }
+
+message G2C_KickOut // IMessage
+{
+	string Message = 1;
+}
