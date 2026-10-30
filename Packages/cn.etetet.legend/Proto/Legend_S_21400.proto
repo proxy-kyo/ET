@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package ET;
+
+// ResponseType M2G_LegendEnterMap
+message G2M_LegendEnterMap // IRequest
+{
+    int32 RpcId = 1;
+    int64 PlayerId = 2;
+    ActorId GateActorId = 3;
+}
+
+message M2G_LegendEnterMap // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    int64 UnitId = 4;
+    int64 MapSceneId = 5;
+}

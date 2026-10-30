@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ET;
+
+// ResponseType G2C_LegendEnterMap
+message C2G_LegendEnterMap // ISessionRequest
+{
+    int32 RpcId = 1;
+}
+
+message G2C_LegendEnterMap // ISessionResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    int64 MapSceneId = 4;
+    string MapName = 5;
+    int64 UnitId = 6;
+}
