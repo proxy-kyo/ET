@@ -27,6 +27,10 @@
 
 登录 → 进入一张地图 → 走格子 → 打怪 → 掉落 → 拾取 → 多人互相可见。职业、PK、行会、攻城都放到后面。
 
+## 原住居民
+
+玩家降临到原住居民的世界，玩家才是外来者。原住居民由服务端 AI（behaviortree）驱动，自己打怪、升级、交易。对客户端来说，他们和真人玩家完全看不出区别。约束见 `docs/adr/0005-natives-server-ai-indistinguishable.md`。
+
 ## 已知风险
 
 - URP 17.0.4（Unity 6 才用的版本）跑在 2022.3 上。之前 `packages-lock.json` 丢了 shadergraph 和 render-pipelines.core，第一次打开 Unity 时要检查依赖能不能正常解析。

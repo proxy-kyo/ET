@@ -61,3 +61,6 @@ MainPackage.txt
 .worktrees/
 .codegraph/
 .codex/
+
+# orchestrate 临时目录
+.orch/
