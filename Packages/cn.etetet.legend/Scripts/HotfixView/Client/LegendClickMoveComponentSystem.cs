@@ -16,7 +16,17 @@ namespace ET.Client
             self.Ground.transform.localScale = new Vector3(map.Width * map.CellSize / 10, 1, map.Height * map.CellSize / 10);
             self.GroundCollider = self.Ground.GetComponent<Collider>();
             Material material = new(Shader.Find("Universal Render Pipeline/Unlit"));
-            material.color = Color.gray;
+            // ponytail: 棋盘格只为看出格子和移动，Tiled 地图接入后删掉。
+            Texture2D checker = new(map.Width, map.Height) { filterMode = FilterMode.Point };
+            for (int y = 0; y < map.Height; ++y)
+            {
+                for (int x = 0; x < map.Width; ++x)
+                {
+                    checker.SetPixel(x, y, (x + y) % 2 == 0 ? new Color(0.45f, 0.45f, 0.45f) : new Color(0.6f, 0.6f, 0.6f));
+                }
+            }
+            checker.Apply();
+            material.mainTexture = checker;
             self.Ground.GetComponent<Renderer>().sharedMaterial = material;
             self.Camera = Camera.main;
             self.Camera.transform.rotation = Quaternion.Euler(45, 45, 0);
@@ -56,7 +66,9 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this LegendClickMoveComponent self)
         {
-            UnityEngine.Object.Destroy(self.Ground.GetComponent<Renderer>().sharedMaterial);
+            Material material = self.Ground.GetComponent<Renderer>().sharedMaterial;
+            UnityEngine.Object.Destroy(material.mainTexture);
+            UnityEngine.Object.Destroy(material);
             UnityEngine.Object.Destroy(self.Ground);
             self.Ground = null;
             self.GroundCollider = null;
