@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package ET;
+
+message C2M_GridMoveTo // ILocationMessage
+{
+    int32 RpcId = 1;
+    int32 X = 2;
+    int32 Y = 3;
+}
+
+message M2C_GridStep // IMessage
+{
+    int64 UnitId = 1;
+    int32 X = 2;
+    int32 Y = 3;
+    int32 DurationMs = 4;
+}
+
+message M2C_GridStop // IMessage
+{
+    int64 UnitId = 1;
+    int32 X = 2;
+    int32 Y = 3;
+}
