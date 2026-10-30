@@ -13,6 +13,8 @@ namespace ET.Server
             root.AddComponent<MessageSender>();
             root.AddComponent<UnitComponent>();
             root.AddComponent<AOIManagerComponent>();
+            root.AddComponent<GridMapComponent, int, int, float>(LegendMapConst.Width, LegendMapConst.Height, LegendMapConst.CellSize);
+            root.AddComponent<GridOccupancyComponent>();
             root.AddComponent<LocationProxyComponent>();
             root.AddComponent<MessageLocationSenderComponent>();
 

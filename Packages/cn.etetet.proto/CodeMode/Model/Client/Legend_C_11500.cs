@@ -48,9 +48,71 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(Opcode.LegendUnitInfo)]
+    public partial class LegendUnitInfo : MessageObject
+    {
+        public static LegendUnitInfo Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<LegendUnitInfo>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long UnitId { get; set; }
+        [MemoryPackOrder(1)]
+        public int ConfigId { get; set; }
+        [MemoryPackOrder(2)]
+        public int X { get; set; }
+        [MemoryPackOrder(3)]
+        public int Y { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.M2C_LegendUnitsAppear)]
+    public partial class M2C_LegendUnitsAppear : MessageObject, IMessage
+    {
+        public static M2C_LegendUnitsAppear Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<M2C_LegendUnitsAppear>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public List<LegendUnitInfo> Units { get; set; } = new();
+
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.M2C_LegendUnitsDisappear)]
+    public partial class M2C_LegendUnitsDisappear : MessageObject, IMessage
+    {
+        public static M2C_LegendUnitsDisappear Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<M2C_LegendUnitsDisappear>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public List<long> UnitIds { get; set; } = new();
+
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static partial class Opcode
     {
         public const ushort C2G_LegendEnterMap = 11501;
         public const ushort G2C_LegendEnterMap = 11502;
+        public const ushort LegendUnitInfo = 11503;
+        public const ushort M2C_LegendUnitsAppear = 11504;
+        public const ushort M2C_LegendUnitsDisappear = 11505;
     }
 }

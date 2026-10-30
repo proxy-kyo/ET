@@ -1,3 +1,5 @@
+using Unity.Mathematics;
+
 namespace ET.Server
 {
     [MessageHandler(SceneType.LegendMap)]
@@ -14,6 +16,7 @@ namespace ET.Server
             if (oldUnit != null)
             {
                 // ponytail: 断线清理暂靠重登覆盖，login 断线不会通知 Map，后续做断线下线时补 G2M 通知。
+                oldUnit.RemoveComponent<AOIEntity>();
                 await oldUnit.RemoveLocation(LocationType.Unit);
                 unitComponent = unitComponentRef;
                 unitComponent.Remove(request.PlayerId);
@@ -24,6 +27,12 @@ namespace ET.Server
             unitComponent.Add(unit);
             unit.AddComponent<UnitGateInfoComponent>().ActorId = request.GateActorId;
             unit.AddComponent<MailBoxComponent, int>(MailBoxType.OrderedMessage);
+            NumericComponent numeric = unit.AddComponent<NumericComponent>();
+            numeric.SetNoEvent(NumericType.AOI, LegendMapConst.AOIRange);
+            numeric.SetNoEvent(NumericType.Phase, (long)PhaseType.Normal);
+            unit.AddComponent<GridMoveComponent>();
+            GridMoveHelper.Enter(unit, new int2(LegendMapConst.SpawnX, LegendMapConst.SpawnY));
+            unit.AddComponent<AOIEntity>();
             EntityRef<Unit> unitRef = unit;
             await unit.AddLocation(LocationType.Unit);
             unit = unitRef;

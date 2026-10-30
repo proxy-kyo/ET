@@ -17,3 +17,21 @@ message G2C_LegendEnterMap // ISessionResponse
     string MapName = 5;
     int64 UnitId = 6;
 }
+
+message LegendUnitInfo
+{
+    int64 UnitId = 1;
+    int32 ConfigId = 2;
+    int32 X = 3;
+    int32 Y = 4;
+}
+
+message M2C_LegendUnitsAppear // IMessage
+{
+    repeated LegendUnitInfo Units = 1;
+}
+
+message M2C_LegendUnitsDisappear // IMessage
+{
+    repeated int64 UnitIds = 1;
+}
