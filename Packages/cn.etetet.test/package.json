@@ -16,9 +16,9 @@
   "dependencies": {
     "cn.etetet.loader": "2.0.7",
     "cn.etetet.map": "1.0.0",
-    "cn.etetet.mapplay": "1.0.0",
     "cn.etetet.router": "2.0.1",
-    "cn.etetet.unitybridge": "2.0.0"
+    "cn.etetet.unitybridge": "2.0.0",
+    "cn.etetet.console": "2.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"

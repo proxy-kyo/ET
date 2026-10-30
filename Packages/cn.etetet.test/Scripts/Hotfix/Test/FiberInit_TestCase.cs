@@ -1,4 +1,5 @@
-﻿using ET.Server;
+using System.Linq;
+using ET.Server;
 
 namespace ET.Test
 {
@@ -38,7 +39,9 @@ namespace ET.Test
             // 根据配置创建纤程
             var scenes = fiber.GetSingleton<StartSceneConfigCategory>().GetByProcess(process);
             
-            foreach (StartSceneConfig startConfig in scenes)
+            // 完整配置可包含未启用的包；测试只启动当前编译集提供的场景。
+            var sceneTypes = SceneTypeSingleton.Instance.GetAll().Values;
+            foreach (StartSceneConfig startConfig in scenes.Where(config => sceneTypes.Contains(config.SceneType)))
             {
                 int sceneType = SceneTypeSingleton.Instance.GetSceneType(startConfig.SceneType);
                 if (sceneType == SceneType.ServiceDiscovery)
@@ -51,18 +54,4 @@ namespace ET.Test
         }
     }
 
-    [Event(SceneType.All)]
-    public class FiberDestroyEvent_TestFiberDatabaseCleanup : AEvent<Scene, FiberDestroyEvent>
-    {
-        protected override async ETTask Run(Scene scene, FiberDestroyEvent args)
-        {
-            TestFiberDatabaseCleanupComponent cleanupComponent = scene.GetComponent<TestFiberDatabaseCleanupComponent>();
-            if (cleanupComponent == null)
-            {
-                return;
-            }
-
-            await cleanupComponent.CleanupAsync(nameof(FiberDestroyEvent));
-        }
-    }
 }

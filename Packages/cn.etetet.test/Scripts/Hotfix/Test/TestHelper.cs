@@ -39,15 +39,14 @@ namespace ET.Test
         {
             Scene clientScene = robotFiber.Root;
             string mapName = clientScene.CurrentScene().Name;
-            Fiber map = testFiber.GetFiber("MapManager").GetFiber(mapName);
+            Fiber map = testFiber.GetFiber(mapName, recursive: true);
             return map;
         }
 
         public static Unit GetServerUnit(Fiber testFiber, Fiber robotFiber)
         {
             Scene clientScene = robotFiber.Root;
-            string mapName = clientScene.CurrentScene().Name;
-            Fiber map = testFiber.GetFiber("MapManager").GetFiber(mapName);
+            Fiber map = GetMap(testFiber, robotFiber);
             ET.Client.PlayerComponent player = clientScene.GetComponent<ET.Client.PlayerComponent>();
             Unit unit = map.Root.GetComponent<UnitComponent>().Get(player.MyId);
             return unit;

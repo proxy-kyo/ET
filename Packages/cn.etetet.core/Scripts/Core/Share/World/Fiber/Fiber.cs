@@ -312,6 +312,11 @@ namespace ET
         
         public Fiber GetFiber(string name)
         {
+            return this.GetFiber(name, recursive: false);
+        }
+
+        public Fiber GetFiber(string name, bool recursive)
+        {
             foreach (Fiber fiber in this.children.Values)
             {
                 if (fiber.SchedulerType != SchedulerType.Parent)
@@ -324,6 +329,22 @@ namespace ET
                 }
 
                 return fiber;
+            }
+            if (recursive)
+            {
+                foreach (Fiber fiber in this.children.Values)
+                {
+                    if (fiber.SchedulerType != SchedulerType.Parent)
+                    {
+                        continue;
+                    }
+
+                    Fiber result = fiber.GetFiber(name, recursive: true);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
             }
             return null;
         }

@@ -6,8 +6,8 @@
 - 调整范围前读项目根 `docs/legend-plan.md`；确认术语时读根 `GLOSSARY.md`；改变既有设计决策前读根 `docs/adr/`。
 - 登录复用 `cn.etetet.login`，登录地址读取 `GlobalConfig.Address`，账号和密码由用户输入。
 - 使用独立的 Legend、LegendClient、LegendMap SceneType；登录界面为本包 LegendLogin。
-- 框架包之间有未声明的相互依赖（例如 map 引用 mapmanager，mapplay 引用 statesync 的 HPViewComponent），所以 package.json 里依赖了 statesync、transfer、mapmanager、mapplay、move、spell、quest、item、btnode、robot 等，它们会被编译。legend 只靠它们通过编译，**代码不引用它们的类型和方法**，进图走 legend 自己的协议，不走 transfer/mapmanager。
-- Gate 收客户端消息的入口 `NetComponentOnReadInvoker_Gate` 用 statesync 那份，legend 不再自带。lockstep、kdemo 不进入依赖闭包。
+- 依赖仅限本包 package.json 声明的保留包及其递归闭包；不引用 statesync、transfer、mapmanager、mapplay、move、spell、quest、item、btnode、robot 等非保留包类型。
+- Gate 收客户端消息的入口 `NetComponentOnReadInvoker_Gate` 由 login 包提供；lockstep、kdemo 不进入依赖闭包。
 - `SceneType.Client`、`SceneType.Map` 的处理器不会作用到 legend 的纤程，因为 legend 只用自己的 SceneType。
 - 当前范围是登录进图、格子点击行走、AOI 单位互见与方块插值表现；UnitId 等于 PlayerId。
 - 地图暂为 LegendMapConst 定义的 64×64 全可走空图，Tiled 接入后替换；服务端权威，不做本机预测。

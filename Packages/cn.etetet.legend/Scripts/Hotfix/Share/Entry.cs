@@ -1,0 +1,53 @@
+using System;
+using System.Net;
+using Unity.Mathematics;
+
+namespace ET
+{
+    public static class Entry
+    {
+        public static void Start()
+        {
+            StartAsync().Coroutine();
+        }
+        
+        private static async ETTask StartAsync()
+        {
+            WinPeriod.Init();
+
+            // 注册Mongo type
+            MongoRegister.Init();
+            
+            MemoryPackRegister.Init();
+            
+            // 注册Entity序列化器
+            EntitySerializeRegister.Init();
+            
+            MongoRegister.RegisterStruct<float2>();
+            MongoRegister.RegisterStruct<float3>();
+            MongoRegister.RegisterStruct<float4>();
+            MongoRegister.RegisterStruct<quaternion>();
+
+            World.Instance.AddSingleton<SceneTypeSingleton, Type>(typeof(SceneType));
+            World.Instance.AddSingleton<ObjectPool>();
+            World.Instance.AddSingleton<IdGenerater>();
+            World.Instance.AddSingleton<OpcodeType>();
+            World.Instance.AddSingleton<NumericTypeEnum>();
+            World.Instance.AddSingleton<MessageQueue>();
+            
+            LogMsg logMsg = World.Instance.AddSingleton<LogMsg>();
+            logMsg.AddIgnore(typeof(C2G_Ping));
+            logMsg.AddIgnore(typeof(G2C_Ping));
+            logMsg.AddIgnore(typeof(MessageResponse));
+            
+            
+            // 创建需要reload的code singleton
+            CodeTypes.Instance.CodeProcess();
+            
+            await World.Instance.AddSingleton<ConfigLoader>().LoadAsync();
+
+            int sceneType = SceneTypeSingleton.Instance.GetSceneType(Options.Instance.SceneName);
+            await FiberManager.Instance.CreateMainFiber(sceneType, $"{Options.Instance.SceneName}@{Options.Instance.Process}@{Options.Instance.ReplicaIndex}");
+        }
+    }
+}

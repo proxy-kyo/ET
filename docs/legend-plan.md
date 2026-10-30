@@ -12,7 +12,7 @@
 | 游戏包 | 新建 `cn.etetet.legend`，作为第 5 层入口。登录参照 `cn.etetet.kdemo` 的做法复用 `cn.etetet.login`，`kdemo` 本身不改 |
 | 移动 | 新写格子移动包：8 方向单步移动、一格只站一个单位、A* 寻路、服务端权威。替代 `move` 和 `recast` |
 | 复用的 ET 包 | login、db、aoi、map、unit、numeric、item、equipment、spell、behaviortree。开工前逐个读源码确认能复用到什么程度 |
-| 网络 | ET 默认：经 Router 走 KCP |
+| 网络 | ET 默认：经 Router 走 KCP。上线后前面有一层 TLS 保护，客户端到服务端的链路加密由它负责，应用层不再自己加密（例如登录密码不另做加密） |
 | 存储 | 只用 MongoDB（WSL Docker） |
 | 配置 | Luban Excel |
 | 热更 | HybridCLR 加 YooAssets，服务端热重载 |

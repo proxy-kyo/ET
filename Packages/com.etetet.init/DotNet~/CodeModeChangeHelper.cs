@@ -129,7 +129,7 @@ namespace ET
                                     continue;
                                 }
 
-                                // 对于目标包，根据 codeMode 处理；Editor 作为通用扩展入口，对所有包保留。
+                                // 所有程序集按目标包和 codeMode 生成，避免 Editor 引用已排除的 Model。
                                 HandleAssemblyReferenceFile(codeMode, moduleDir, scriptDir, modelDir, serverDir, isTargetPackage);
                             }
                         }
@@ -143,7 +143,7 @@ namespace ET
             string filePath = Path.Combine(moduleDir, scriptDir, modelDir, serverDir, "AssemblyReference.asmref");
             DeleteAssemblyReference(filePath);
 
-            if (isTargetPackage || modelDir == "Editor")
+            if (isTargetPackage)
             {
                 string path = $"{codeMode}/{scriptDir}/{modelDir}/{serverDir}";
                 if (v.Contains(path))
