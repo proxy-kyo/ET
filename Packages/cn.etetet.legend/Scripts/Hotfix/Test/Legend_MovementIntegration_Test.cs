@@ -12,7 +12,7 @@ namespace ET.Test
             Scene root = scope.TestFiber.Root;
             root.AddComponent<TimerComponent>();
             root.AddComponent<MessageSender>();
-            Scene scene = EntitySceneFactory.CreateScene(root, IdGenerater.Instance.GenerateId(), SceneType.LegendMap,
+            Scene scene = EntitySceneFactory.CreateScene(root, IdGenerater.Instance.GenerateId(), SceneType.Map,
                 nameof(Legend_MovementIntegration_Test));
             scene.AddComponent<GridMapComponent, int, int, float>(LegendMapConst.Width, LegendMapConst.Height, LegendMapConst.CellSize);
             GridOccupancyComponent occupancy = scene.AddComponent<GridOccupancyComponent>();

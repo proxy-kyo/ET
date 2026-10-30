@@ -13,17 +13,17 @@ namespace ET.Server
             EntityRef<Scene> rootRef = root;
             ServiceDiscoveryProxy serviceDiscoveryProxy = root.GetComponent<ServiceDiscoveryProxy>();
             EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyRef = serviceDiscoveryProxy;
-            List<ServiceInfo> maps = serviceDiscoveryProxy.GetBySceneTypeAndZone(SceneType.LegendMap, root.Zone());
+            List<ServiceInfo> maps = serviceDiscoveryProxy.GetBySceneTypeAndZone(SceneType.Map, root.Zone());
             if (maps.Count == 0)
             {
                 await serviceDiscoveryProxy.SubscribeServiceChange("LegendMap",
                     new StringKV
                     {
-                        { ServiceMetaKey.SceneType, SceneTypeSingleton.Instance.GetSceneName(SceneType.LegendMap) },
+                        { ServiceMetaKey.SceneType, SceneTypeSingleton.Instance.GetSceneName(SceneType.Map) },
                     });
                 root = rootRef;
                 serviceDiscoveryProxy = serviceDiscoveryProxyRef;
-                maps = serviceDiscoveryProxy.GetBySceneTypeAndZone(SceneType.LegendMap, root.Zone());
+                maps = serviceDiscoveryProxy.GetBySceneTypeAndZone(SceneType.Map, root.Zone());
                 if (maps.Count == 0)
                 {
                     response.Error = ErrorCode.ERR_LegendMapNotFound;

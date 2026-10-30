@@ -10,6 +10,7 @@ namespace ET.Server
         private static void Awake(this AOIEntity self)
         {
             Unit unit = self.GetParent<Unit>();
+            self.HasClient = unit.GetComponent<UnitGateInfoComponent>() != null;
             NumericComponent numericComponent = unit.NumericComponent;
             self.Phase = (PhaseType)numericComponent.Get(NumericType.Phase);
             self.NumericComponent = numericComponent;
@@ -111,36 +112,15 @@ namespace ET.Server
                 return;
             }
 
-            if (self.Unit.UnitType == UnitType.Player)
+            self.SeeUnits.Add(enter.Id, enter);
+            enter.BeSeeUnits.Add(self.Id, self);
+            if (enter.HasClient)
             {
-                if (enter.Unit.UnitType == UnitType.Player)
-                {
-                    self.SeeUnits.Add(enter.Id, enter);
-                    enter.BeSeeUnits.Add(self.Id, self);
-                    self.SeePlayers.Add(enter.Id, enter);
-                    enter.BeSeePlayers.Add(self.Id, self);
-                    
-                }
-                else
-                {
-                    self.SeeUnits.Add(enter.Id, enter);
-                    enter.BeSeeUnits.Add(self.Id, self);
-                    enter.BeSeePlayers.Add(self.Id, self);
-                }
+                self.SeePlayers.Add(enter.Id, enter);
             }
-            else
+            if (self.HasClient)
             {
-                if (enter.Unit.UnitType == UnitType.Player)
-                {
-                    self.SeeUnits.Add(enter.Id, enter);
-                    enter.BeSeeUnits.Add(self.Id, self);
-                    self.SeePlayers.Add(enter.Id, enter);
-                }
-                else
-                {
-                    self.SeeUnits.Add(enter.Id, enter);
-                    enter.BeSeeUnits.Add(self.Id, self);
-                }
+                enter.BeSeePlayers.Add(self.Id, self);
             }
             EventSystem.Instance.Publish(self.Scene(), new UnitEnterSightRange() { A = self.Unit, B = enter.Unit });
         }
@@ -158,13 +138,13 @@ namespace ET.Server
                 return;
             }
 
-            if (leave.Unit.UnitType == UnitType.Player)
+            if (leave.HasClient)
             {
                 self.SeePlayers.Remove(leave.Id);
             }
 
             leave.BeSeeUnits.Remove(self.Id);
-            if (self.Unit.UnitType == UnitType.Player)
+            if (self.HasClient)
             {
                 leave.BeSeePlayers.Remove(self.Id);
             }

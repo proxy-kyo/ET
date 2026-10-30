@@ -2,7 +2,7 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
-    [MessageHandler(SceneType.LegendMap)]
+    [MessageHandler(SceneType.Map)]
     public class G2M_LegendEnterMapHandler: MessageHandler<Scene, G2M_LegendEnterMap, M2G_LegendEnterMap>
     {
         protected override async ETTask Run(Scene scene, G2M_LegendEnterMap request, M2G_LegendEnterMap response)

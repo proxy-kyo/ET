@@ -1,6 +1,6 @@
 namespace ET.Server
 {
-    [Invoke(SceneType.LegendMap)]
+    [Invoke(SceneType.Map)]
     public class FiberInit_LegendMap: AInvokeHandler<FiberInit, ETTask>
     {
         public override async ETTask Handle(FiberInit fiberInit)

@@ -51,7 +51,7 @@ namespace ET.Server
             // Gate 按 zone 查找地图，只在本进程存在 Gate 的 zone 创建地图纤程。
             foreach (int zone in gateZones)
             {
-                await fiber.CreateFiber(SchedulerType.ThreadPool, zone, IdGenerater.Instance.GenerateId(), SceneType.LegendMap,
+                await fiber.CreateFiber(SchedulerType.ThreadPool, zone, IdGenerater.Instance.GenerateId(), SceneType.Map,
                     $"{LegendMapName.First}@{process}@{Options.Instance.ReplicaIndex}");
             }
 

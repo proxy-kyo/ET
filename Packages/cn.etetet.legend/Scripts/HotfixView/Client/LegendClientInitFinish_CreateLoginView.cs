@@ -3,7 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace ET.Client
 {
-    [Event(SceneType.LegendClient)]
+    [Event(SceneType.Client)]
     public class LegendClientInitFinish_CreateLoginView: AEvent<Scene, LegendClientInitFinish>
     {
         protected override async ETTask Run(Scene root, LegendClientInitFinish args)

@@ -14,7 +14,7 @@
 
 - `GridHelper`：坐标转换、地形校验、禁止切角的 A*（占用目标允许寻路）。
 - `GridMoveHelper.Enter / MoveTo / Stop`：占位、移动、停止；调用前地图已有 GridMapComponent、GridOccupancyComponent，Unit 已有 GridMoveComponent。
-- `GridMessageHelper.Broadcast`：仅向有 Gate 的观察单位广播，无 AOI 时直接返回。
+- `MapMessageHelper.NoticeClient(unit, message, NoticeType.Broadcast)`：复用 map 广播，仅发送给有 Gate 的观察单位，无 AOI 时直接返回。
 - `Proto/Grid_C_11600.proto`：仅定义消息，不包含消息处理器。
 
 ## 最小验证

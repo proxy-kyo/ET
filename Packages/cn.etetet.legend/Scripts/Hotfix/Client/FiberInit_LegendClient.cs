@@ -1,6 +1,6 @@
 namespace ET.Client
 {
-    [Invoke(SceneType.LegendClient)]
+    [Invoke(SceneType.Client)]
     public class FiberInit_LegendClient: AInvokeHandler<FiberInit, ETTask>
     {
         public override async ETTask Handle(FiberInit fiberInit)

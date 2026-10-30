@@ -20,7 +20,7 @@ namespace ET.Server
             }
             int r = (viewDistance - 1) / AOIManagerComponent.CellSize + 1;
             int leaveR = r;
-            if (aoiEntity.Unit.UnitType == UnitType.Player)
+            if (aoiEntity.HasClient)
             {
                 leaveR += 1;
             }

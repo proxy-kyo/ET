@@ -11,7 +11,13 @@ namespace ET.Server
                 throw new System.Exception($"broadcast message can not be IPool: {message.GetType().FullName}");
             }
 
-            Dictionary<long, EntityRef<AOIEntity>> dict = unit.GetBeSeePlayers();
+            // 纯服务端移动可在尚未加入 AOI 时调用广播。
+            AOIEntity aoi = unit.GetComponent<AOIEntity>();
+            if (aoi == null)
+            {
+                return;
+            }
+            Dictionary<long, EntityRef<AOIEntity>> dict = aoi.GetBeSeePlayers();
             MessageSender messageSender = unit.Root().GetComponent<MessageSender>();
             
             foreach (AOIEntity u in dict.Values)
@@ -20,18 +26,24 @@ namespace ET.Server
                 {
                     continue;
                 }
-                messageSender.Send(u.Unit.GetComponent<UnitGateInfoComponent>().ActorId, message);
+                UnitGateInfoComponent gate = u.Unit.GetComponent<UnitGateInfoComponent>();
+                if (gate == null)
+                {
+                    continue;
+                }
+                messageSender.Send(gate.ActorId, message);
             }
         }
         
         private static void SendToClient(Unit unit, IMessage message)
         {
-            if (!unit.UnitType.IsSame(UnitType.Player))
+            UnitGateInfoComponent gate = unit.GetComponent<UnitGateInfoComponent>();
+            if (gate == null)
             {
                 return;
             }
             MessageSender messageSender = unit.Root().GetComponent<MessageSender>();
-            messageSender.Send(unit.GetComponent<UnitGateInfoComponent>().ActorId, message);
+            messageSender.Send(gate.ActorId, message);
         }
         
         public static void NoticeClient(Unit unit, IMessage message, NoticeType noticeType)

@@ -6,6 +6,8 @@ namespace ET.Server
     [ComponentOf(typeof(Unit))]
     public class AOIEntity: Entity, IAwake, IDestroy
     {
+        public bool HasClient;
+
         public PhaseType Phase = PhaseType.Normal;
 
         public Unit Unit => this.GetParent<Unit>();
@@ -56,10 +58,10 @@ namespace ET.Server
         // 看见我的Unit
         public Dictionary<long, EntityRef<AOIEntity>> BeSeeUnits = new Dictionary<long, EntityRef<AOIEntity>>();
         
-        // 我看的见的Player
+        // 我看得见的有客户端的单位
         public Dictionary<long, EntityRef<AOIEntity>> SeePlayers = new Dictionary<long, EntityRef<AOIEntity>>();
 
-        // 看见我的Player单独放一个Dict，用于广播
+        // 看见我的有客户端的观察者，用于广播
         public Dictionary<long, EntityRef<AOIEntity>> BeSeePlayers = new Dictionary<long, EntityRef<AOIEntity>>();
     }
 }

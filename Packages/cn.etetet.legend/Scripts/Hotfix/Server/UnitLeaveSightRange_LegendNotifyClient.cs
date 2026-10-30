@@ -1,6 +1,6 @@
 namespace ET.Server
 {
-    [Event(SceneType.LegendMap)]
+    [Event(SceneType.Map)]
     public class UnitLeaveSightRange_LegendNotifyClient: AEvent<Scene, UnitLeaveSightRange>
     {
         protected override async ETTask Run(Scene scene, UnitLeaveSightRange args)

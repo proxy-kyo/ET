@@ -87,7 +87,7 @@ namespace ET.Server
             message.UnitId = unit.Id;
             message.X = self.Cell.x;
             message.Y = self.Cell.y;
-            GridMessageHelper.Broadcast(unit, message);
+            MapMessageHelper.NoticeClient(unit, message, NoticeType.Broadcast);
         }
 
         internal static void Step(Unit unit)
@@ -141,7 +141,7 @@ namespace ET.Server
             message.X = next.x;
             message.Y = next.y;
             message.DurationMs = duration;
-            GridMessageHelper.Broadcast(unit, message);
+            MapMessageHelper.NoticeClient(unit, message, NoticeType.Broadcast);
             Schedule(self, duration);
         }
 
