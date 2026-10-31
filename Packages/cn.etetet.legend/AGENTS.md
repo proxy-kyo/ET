@@ -10,7 +10,7 @@
 - Gate 收客户端消息的入口 `NetComponentOnReadInvoker_Gate` 由 login 包提供；lockstep、kdemo 不进入依赖闭包。
 - 地图位置变化复用 map 包的 ChangePosition_NotifyAOI；客户端 MailBoxType.LegendClient 保留进图前消息缓冲。
 - 当前范围是登录进图、格子点击行走、AOI 单位互见与方块插值表现；UnitId 等于 PlayerId。
-- 地图暂为 LegendMapConst 定义的 64×64 全可走空图，Tiled 接入后替换；服务端权威，不做本机预测。
+- 地图共用 Assets/GameRes/Map/LegendMap1.json（Tiled JSON），由 Tools~/gen_map.py 固定种子生成地图和 LegendTiles.png；格子按 y * width + x 索引，仅 block 层非零 gid 阻挡（读取时去翻转位）；服务端权威，不做本机预测。
 - Unit 先添加 NumericComponent（AOI 使用毫米、Phase 为 Normal），再添加 GridMoveComponent 并 Enter，最后添加 AOIEntity；移除 Unit 前先移除 AOIEntity，保证离开视野事件处理时 Unit 仍存活。
 - 移动统一调用 grid；不按 UnitType 分支，客户端消息不带单位类型，有无客户端只检查 UnitGateInfoComponent。遵守 `docs/adr/0005-natives-server-ai-indistinguishable.md`。
 - LegendClient 使用自己的消息邮箱；进图 RPC 返回前的视野/步进消息暂存，CurrentScene 及视图初始化后按序转发。

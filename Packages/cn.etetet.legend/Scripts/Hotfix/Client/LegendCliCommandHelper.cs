@@ -78,6 +78,11 @@ namespace ET.Client
                         Fail(response, "cell out of bounds");
                         return;
                     }
+                    if (GridHelper.IsBlocked(map, cell))
+                    {
+                        Fail(response, "cell blocked");
+                        return;
+                    }
                     LegendMoveHelper.MoveTo(root, cell);
                     response.Message = $"move -> {x} {y}";
                     return;
@@ -219,7 +224,7 @@ namespace ET.Client
                 {
                     target = new int2(position.x + RandomGenerator.RandomNumber(-8, 9),
                         position.y + RandomGenerator.RandomNumber(-8, 9));
-                } while (target.Equals(position) || !GridHelper.InBounds(map, target));
+                } while (target.Equals(position) || !GridHelper.InBounds(map, target) || GridHelper.IsBlocked(map, target));
                 LegendMoveHelper.MoveTo(root, target);
                 using (LegendClient2Cli_Command wait = LegendClient2Cli_Command.Create())
                 {

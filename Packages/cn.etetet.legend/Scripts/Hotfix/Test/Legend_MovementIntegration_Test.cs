@@ -14,7 +14,7 @@ namespace ET.Test
             root.AddComponent<MessageSender>();
             Scene scene = EntitySceneFactory.CreateScene(root, IdGenerater.Instance.GenerateId(), SceneType.Map,
                 nameof(Legend_MovementIntegration_Test));
-            scene.AddComponent<GridMapComponent, int, int, float>(LegendMapConst.Width, LegendMapConst.Height, LegendMapConst.CellSize);
+            scene.AddComponent<GridMapComponent, int, int, float>(64, 64, LegendMapConst.CellSize);
             GridOccupancyComponent occupancy = scene.AddComponent<GridOccupancyComponent>();
             scene.AddComponent<AOIManagerComponent>();
             UnitComponent units = scene.AddComponent<UnitComponent>();
@@ -24,7 +24,7 @@ namespace ET.Test
             GridMoveComponent secondMove = second.GetComponent<GridMoveComponent>();
             AOIEntity firstAOI = first.GetComponent<AOIEntity>();
             AOIEntity secondAOI = second.GetComponent<AOIEntity>();
-            if (!firstMove.Cell.Equals(new int2(LegendMapConst.SpawnX, LegendMapConst.SpawnY)) ||
+            if (!firstMove.Cell.Equals(new int2(32, 32)) ||
                 firstMove.Cell.Equals(secondMove.Cell) || occupancy.Occupants.Count != 2)
             {
                 return 1;
@@ -61,7 +61,7 @@ namespace ET.Test
             numeric.SetNoEvent(NumericType.AOI, LegendMapConst.AOIRange);
             numeric.SetNoEvent(NumericType.Phase, (long)PhaseType.Normal);
             unit.AddComponent<GridMoveComponent>();
-            GridMoveHelper.Enter(unit, new int2(LegendMapConst.SpawnX, LegendMapConst.SpawnY));
+            GridMoveHelper.Enter(unit, new int2(32, 32));
             unit.AddComponent<AOIEntity>();
             return unit;
         }

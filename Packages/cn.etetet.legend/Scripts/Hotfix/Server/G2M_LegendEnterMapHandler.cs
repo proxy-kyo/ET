@@ -1,5 +1,3 @@
-using Unity.Mathematics;
-
 namespace ET.Server
 {
     [MessageHandler(SceneType.Map)]
@@ -31,7 +29,8 @@ namespace ET.Server
             numeric.SetNoEvent(NumericType.AOI, LegendMapConst.AOIRange);
             numeric.SetNoEvent(NumericType.Phase, (long)PhaseType.Normal);
             unit.AddComponent<GridMoveComponent>();
-            GridMoveHelper.Enter(unit, new int2(LegendMapConst.SpawnX, LegendMapConst.SpawnY));
+            scene = sceneRef;
+            GridMoveHelper.Enter(unit, scene.GetComponent<LegendMapComponent>().Spawn);
             unit.AddComponent<AOIEntity>();
             EntityRef<Unit> unitRef = unit;
             await unit.AddLocation(LocationType.Unit);

@@ -16,17 +16,23 @@ namespace ET.Client
             self.Ground.transform.localScale = new Vector3(map.Width * map.CellSize / 10, 1, map.Height * map.CellSize / 10);
             self.GroundCollider = self.Ground.GetComponent<Collider>();
             Material material = new(Shader.Find("Universal Render Pipeline/Unlit"));
-            // ponytail: 棋盘格只为看出格子和移动，Tiled 地图接入后删掉。
-            Texture2D checker = new(map.Width, map.Height) { filterMode = FilterMode.Point };
+            LegendMapComponent terrain = self.Scene().GetComponent<LegendMapComponent>();
+            Texture2D texture = new(map.Width, map.Height, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point };
+            Mesh mesh = self.Ground.GetComponent<MeshFilter>().sharedMesh;
+            // 用实际 Plane 角点的 UV 方向对齐世界 X/Z 与地图列/行。
+            bool flipX = (mesh.vertices[0].x < 0) != (mesh.uv[0].x < 0.5f);
+            bool flipY = (mesh.vertices[0].z < 0) != (mesh.uv[0].y < 0.5f);
             for (int y = 0; y < map.Height; ++y)
             {
                 for (int x = 0; x < map.Width; ++x)
                 {
-                    checker.SetPixel(x, y, (x + y) % 2 == 0 ? new Color(0.45f, 0.45f, 0.45f) : new Color(0.6f, 0.6f, 0.6f));
+                    int argb = terrain.CellColors[y * map.Width + x];
+                    texture.SetPixel(flipX ? map.Width - 1 - x : x, flipY ? map.Height - 1 - y : y,
+                        new Color32((byte)(argb >> 16), (byte)(argb >> 8), (byte)argb, (byte)(argb >> 24)));
                 }
             }
-            checker.Apply();
-            material.mainTexture = checker;
+            texture.Apply();
+            material.mainTexture = texture;
             self.Ground.GetComponent<Renderer>().sharedMaterial = material;
             self.Camera = Camera.main;
             self.Camera.transform.rotation = Quaternion.Euler(45, 45, 0);

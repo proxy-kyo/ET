@@ -12,7 +12,7 @@ namespace ET.Client
             root.CurrentScene()?.Dispose();
             Scene currentScene = CurrentSceneFactory.Create(response.MapSceneId, response.MapName, root.GetComponent<CurrentScenesComponent>());
             currentScene.AddComponent<UnitComponent>();
-            currentScene.AddComponent<GridMapComponent, int, int, float>(LegendMapConst.Width, LegendMapConst.Height, LegendMapConst.CellSize);
+            LegendMapHelper.Load(currentScene, response.MapName);
             await EventSystem.Instance.PublishAsync(root, new LegendEnterMapFinish
             {
                 MapName = response.MapName,
