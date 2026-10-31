@@ -35,3 +35,18 @@ message M2C_LegendUnitsDisappear // IMessage
 {
     repeated int64 UnitIds = 1;
 }
+
+// ResponseType LegendClient2Cli_Command
+message Cli2LegendClient_Command // IRequest
+{
+    int32 RpcId = 1;
+    string Command = 2;
+    repeated string Args = 3;
+}
+
+message LegendClient2Cli_Command // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}

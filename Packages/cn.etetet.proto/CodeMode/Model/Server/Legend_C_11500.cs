@@ -107,6 +107,50 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(Opcode.Cli2LegendClient_Command)]
+    [ResponseType(nameof(LegendClient2Cli_Command))]
+    public partial class Cli2LegendClient_Command : MessageObject, IRequest
+    {
+        public static Cli2LegendClient_Command Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Cli2LegendClient_Command>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public string Command { get; set; }
+        [MemoryPackOrder(2)]
+        public List<string> Args { get; set; } = new();
+
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.LegendClient2Cli_Command)]
+    public partial class LegendClient2Cli_Command : MessageObject, IResponse
+    {
+        public static LegendClient2Cli_Command Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<LegendClient2Cli_Command>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static partial class Opcode
     {
         public const ushort C2G_LegendEnterMap = 11501;
@@ -114,5 +158,7 @@ namespace ET
         public const ushort LegendUnitInfo = 11503;
         public const ushort M2C_LegendUnitsAppear = 11504;
         public const ushort M2C_LegendUnitsDisappear = 11505;
+        public const ushort Cli2LegendClient_Command = 11506;
+        public const ushort LegendClient2Cli_Command = 11507;
     }
 }

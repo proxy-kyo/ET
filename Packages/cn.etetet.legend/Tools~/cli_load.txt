@@ -1,0 +1,6 @@
+sp 20 wander
+l
+m 60 60
+w at 60 60 20000
+st
+ls

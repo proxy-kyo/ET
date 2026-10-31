@@ -18,6 +18,13 @@
 - Entity 只放数据，逻辑放 System/Helper；await 后通过 EntityRef 重新获取实体；一类一文件。
 - `.meta` 和 `AssemblyReference.asmref` 由工具生成，工程文件由 Unity 生成。
 
+## 命令行客户端
+
+- 项目根启动：`dotnet ./Bin/ET.App.dll --SceneName=LegendCli`；可用 `--Address=地址` 覆盖 GlobalConfig.asset 的 Address。
+- 命令：`login/l [账号 密码]`、`move/m x y`、`pos/p`、`units/u`、`wait/w at x y [超时毫秒]`、`new/n`、`use/s 序号`、`ls`、`spawn/sp 数量 wander`、`stat/st`、`help/h/?`。
+- 新增客户端动作必须在同一次改动中增加命令及短别名；Unity UI 和命令行调用同一个客户端动作入口，移动使用 LegendMoveHelper.MoveTo。
+- 管道输入逐条执行，失败退出码为 1，EOF 成功退出码为 0；冒烟脚本为 Tools~/cli_smoke.txt。
+
 ## 最小验证
 
 1. 运行 `dotnet ./Bin/ET.Proto2CS.dll`；保存本次 Legend 导出结果，执行 `git restore Packages/cn.etetet.proto/CodeMode/`，写回 Legend 导出结果，确认其他包及 Grid 生成文件未变。

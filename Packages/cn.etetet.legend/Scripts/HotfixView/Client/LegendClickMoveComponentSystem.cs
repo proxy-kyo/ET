@@ -57,10 +57,7 @@ namespace ET.Client
                 return;
             }
             // ponytail: 不做本机预测，收到服务端步进后再插值。
-            C2M_GridMoveTo message = C2M_GridMoveTo.Create();
-            message.X = cell.x;
-            message.Y = cell.y;
-            self.Root().GetComponent<ClientSenderComponent>().Send(message);
+            LegendMoveHelper.MoveTo(self.Root(), cell);
         }
 
         [EntitySystem]
