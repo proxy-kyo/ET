@@ -25,9 +25,8 @@ namespace ET.Server
             unitComponent.Add(unit);
             unit.AddComponent<UnitGateInfoComponent>().ActorId = request.GateActorId;
             unit.AddComponent<MailBoxComponent, int>(MailBoxType.OrderedMessage);
-            NumericComponent numeric = unit.AddComponent<NumericComponent>();
-            numeric.SetNoEvent(NumericType.AOI, LegendMapConst.AOIRange);
-            numeric.SetNoEvent(NumericType.Phase, (long)PhaseType.Normal);
+            LegendUnitHelper.InitNumeric(unit);
+            unit.AddComponent<LegendCombatComponent>();
             unit.AddComponent<GridMoveComponent>();
             scene = sceneRef;
             GridMoveHelper.Enter(unit, scene.GetComponent<LegendMapComponent>().Spawn);

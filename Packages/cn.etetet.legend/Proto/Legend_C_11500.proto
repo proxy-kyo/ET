@@ -24,6 +24,30 @@ message LegendUnitInfo
     int32 ConfigId = 2;
     int32 X = 3;
     int32 Y = 4;
+    int64 Hp = 5;
+    int64 MaxHp = 6;
+}
+
+// ResponseType M2C_LegendAttack
+message C2M_LegendAttack // ILocationRequest
+{
+    int32 RpcId = 1;
+    int64 TargetUnitId = 2;
+}
+
+message M2C_LegendAttack // ILocationResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}
+
+message M2C_LegendHit // IMessage
+{
+    int64 AttackerId = 1;
+    int64 TargetId = 2;
+    int32 Damage = 3;
+    int64 Hp = 4;
 }
 
 message M2C_LegendUnitsAppear // IMessage

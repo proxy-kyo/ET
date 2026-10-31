@@ -8,6 +8,7 @@ namespace ET.Client
 {
     public static class LegendCliCommandHelper
     {
+        [EnableGetComponent(typeof(NumericComponent))]
         public static async ETTask Execute(Scene root, Cli2LegendClient_Command request, LegendClient2Cli_Command response)
         {
             List<string> args = request.Args;
@@ -66,6 +67,34 @@ namespace ET.Client
             }
             switch (request.Command)
             {
+                case "attack":
+                    if (args.Count != 1 || !long.TryParse(args[0], out long targetId))
+                    {
+                        Fail(response, "usage: attack unitId");
+                        return;
+                    }
+                    EntityRef<Scene> rootRef = root;
+                    int error = await LegendAttackHelper.Attack(root, targetId);
+                    root = rootRef;
+                    if (root == null) return;
+                    if (error != ErrorCode.ERR_Success)
+                    {
+                        Fail(response, error.ToString());
+                        return;
+                    }
+                    Unit hit = root.CurrentScene().GetComponent<UnitComponent>().Get(targetId);
+                    response.Message = hit == null ? $"hit {targetId}" :
+                        $"hit {targetId} hp={hit.GetComponent<NumericComponent>().GetAsLong(NumericType.HP)}";
+                    return;
+                case "hunt":
+                    int huntTimeout = 30000;
+                    if (args.Count > 1 || (args.Count == 1 && (!int.TryParse(args[0], out huntTimeout) || huntTimeout < 0)))
+                    {
+                        Fail(response, "usage: hunt [timeoutMs]");
+                        return;
+                    }
+                    await Hunt(root, huntTimeout, response);
+                    return;
                 case "move":
                     if (args.Count != 2 || !int.TryParse(args[0], out int x) || !int.TryParse(args[1], out int y))
                     {
@@ -116,6 +145,8 @@ namespace ET.Client
                         int2 unitCell = GridHelper.WorldToCell(map, visible.Position);
                         result.AppendLine();
                         result.Append($"{visible.Id} {unitCell.x} {unitCell.y}");
+                        NumericComponent numeric = visible.GetComponent<NumericComponent>();
+                        result.Append($" hp={numeric.GetAsLong(NumericType.HP)}/{numeric.GetAsLong(NumericType.MaxHP)}");
                         if (visible.Id == myId)
                         {
                             result.Append(" *");
@@ -126,6 +157,61 @@ namespace ET.Client
                 default:
                     Fail(response, $"unknown command: {request.Command}");
                     return;
+            }
+        }
+
+        [EnableGetComponent(typeof(TimerComponent))]
+        private static async ETTask Hunt(Scene root, int timeout, LegendClient2Cli_Command response)
+        {
+            EntityRef<Scene> rootRef = root;
+            long deadline = root.GetSingleton<TimeInfo>().ClientNow() + timeout;
+            long targetId = 0;
+            while (true)
+            {
+                Scene scene = root.CurrentScene();
+                GridMapComponent map = scene.GetComponent<GridMapComponent>();
+                UnitComponent units = scene.GetComponent<UnitComponent>();
+                Unit self = units.Get(root.GetComponent<PlayerComponent>().MyId);
+                Unit target = targetId == 0 ? null : units.Get(targetId);
+                if (targetId != 0 && target == null)
+                {
+                    response.Message = $"killed {targetId}";
+                    return;
+                }
+                if (self != null)
+                {
+                    int2 selfCell = GridHelper.WorldToCell(map, self.Position);
+                    int bestDistance = int.MaxValue;
+                    foreach (Unit visible in units.Children.Values)
+                    {
+                        if (visible.ConfigId != LegendUnitConfigId.Boar)
+                        {
+                            continue;
+                        }
+                        int2 delta = GridHelper.WorldToCell(map, visible.Position) - selfCell;
+                        int distance = delta.x * delta.x + delta.y * delta.y;
+                        if (distance < bestDistance)
+                        {
+                            bestDistance = distance;
+                            target = visible;
+                            targetId = visible.Id;
+                        }
+                    }
+                }
+                if (self != null && target != null)
+                {
+                    await LegendAttackHelper.Attack(root, targetId);
+                    root = rootRef;
+                    if (root == null) return;
+                }
+                if (root.GetSingleton<TimeInfo>().ClientNow() >= deadline)
+                {
+                    Fail(response, "hunt timeout");
+                    return;
+                }
+                await root.GetComponent<TimerComponent>().WaitAsync(100);
+                root = rootRef;
+                if (root == null) return;
             }
         }
 

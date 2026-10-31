@@ -118,6 +118,8 @@ namespace ET.Client
             command = command switch
             {
                 "l" => "login",
+                "a" => "attack",
+                "hu" => "hunt",
                 "m" => "move",
                 "p" => "pos",
                 "u" => "units",
@@ -133,6 +135,8 @@ namespace ET.Client
             {
                 Console.WriteLine("login (l) [账号 密码] - 登录并进图；不带参数时随机建号");
                 Console.WriteLine("move (m) x y - 移动到格子");
+                Console.WriteLine("attack (a) 单位Id - 攻击单位，不相邻时先走过去");
+                Console.WriteLine("hunt (hu) [超时毫秒] - 寻找并击杀附近的野猪，默认 30000 毫秒");
                 Console.WriteLine("pos (p) - 打印自己所在的格子");
                 Console.WriteLine("units (u) - 列出视野内的单位，自己带 *");
                 Console.WriteLine("wait (w) at x y [超时毫秒] - 等自己到达格子，默认 10000 毫秒");
@@ -266,12 +270,17 @@ namespace ET.Client
                 Console.WriteLine($"online={online} login_failed={loginFailed} move_latency_avg={average} p99={p99} samples={latencies.Count}");
                 return true;
             }
-            if (command is not ("login" or "move" or "pos" or "units" or "wait"))
+            if (command is not ("login" or "move" or "pos" or "units" or "wait" or "attack" or "hunt"))
             {
                 Console.WriteLine($"error: unknown command: {command}");
                 return false;
             }
             long timeout = 60000;
+            if (command == "attack")
+            {
+                // ponytail: 走过去的时间随距离变，主纤程只给一个宽松上限。
+                timeout = 120000;
+            }
             if (command == "wait")
             {
                 int waitTimeout = 10000;
@@ -281,6 +290,16 @@ namespace ET.Client
                     return false;
                 }
                 timeout = (long)waitTimeout + 5000;
+            }
+            if (command == "hunt")
+            {
+                int huntTimeout = 30000;
+                if (words.Length > 2 || (words.Length == 2 && (!int.TryParse(words[1], out huntTimeout) || huntTimeout < 0)))
+                {
+                    Console.WriteLine("error: invalid hunt timeout");
+                    return false;
+                }
+                timeout = (long)huntTimeout + 5000;
             }
             using LegendClient2Cli_Command result = await self.Call(self.Clients[self.CurrentIndex - 1], command, timeout, words[1..]);
             if (!Check(result)) return false;

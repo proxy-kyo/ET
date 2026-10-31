@@ -8,7 +8,7 @@ namespace ET.Client
             MailBoxComponent mailbox = args.MailBoxComponent;
             Scene root = mailbox.GetParent<Scene>();
             MessageObject message = args.MessageObject;
-            if (message is M2C_LegendUnitsAppear or M2C_LegendUnitsDisappear or M2C_GridStep or M2C_GridStop)
+            if (message is M2C_LegendUnitsAppear or M2C_LegendUnitsDisappear or M2C_LegendHit or M2C_GridStep or M2C_GridStop)
             {
                 LegendSceneMessagesComponent pending = root.GetComponent<LegendSceneMessagesComponent>();
                 // AOI 的首次通知可能先于进图 RPC 返回。

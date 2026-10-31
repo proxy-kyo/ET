@@ -65,6 +65,74 @@ namespace ET
         public int X { get; set; }
         [MemoryPackOrder(3)]
         public int Y { get; set; }
+        [MemoryPackOrder(4)]
+        public long Hp { get; set; }
+        [MemoryPackOrder(5)]
+        public long MaxHp { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.C2M_LegendAttack)]
+    [ResponseType(nameof(M2C_LegendAttack))]
+    public partial class C2M_LegendAttack : MessageObject, ILocationRequest
+    {
+        public static C2M_LegendAttack Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<C2M_LegendAttack>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public long TargetUnitId { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.M2C_LegendAttack)]
+    public partial class M2C_LegendAttack : MessageObject, ILocationResponse
+    {
+        public static M2C_LegendAttack Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<M2C_LegendAttack>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.M2C_LegendHit)]
+    public partial class M2C_LegendHit : MessageObject, IMessage
+    {
+        public static M2C_LegendHit Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<M2C_LegendHit>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long AttackerId { get; set; }
+        [MemoryPackOrder(1)]
+        public long TargetId { get; set; }
+        [MemoryPackOrder(2)]
+        public int Damage { get; set; }
+        [MemoryPackOrder(3)]
+        public long Hp { get; set; }
         public override void Dispose()
         {
             ObjectPool.Recycle(this);
@@ -156,9 +224,12 @@ namespace ET
         public const ushort C2G_LegendEnterMap = 11501;
         public const ushort G2C_LegendEnterMap = 11502;
         public const ushort LegendUnitInfo = 11503;
-        public const ushort M2C_LegendUnitsAppear = 11504;
-        public const ushort M2C_LegendUnitsDisappear = 11505;
-        public const ushort Cli2LegendClient_Command = 11506;
-        public const ushort LegendClient2Cli_Command = 11507;
+        public const ushort C2M_LegendAttack = 11504;
+        public const ushort M2C_LegendAttack = 11505;
+        public const ushort M2C_LegendHit = 11506;
+        public const ushort M2C_LegendUnitsAppear = 11507;
+        public const ushort M2C_LegendUnitsDisappear = 11508;
+        public const ushort Cli2LegendClient_Command = 11509;
+        public const ushort LegendClient2Cli_Command = 11510;
     }
 }

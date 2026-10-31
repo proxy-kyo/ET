@@ -41,6 +41,7 @@ def main():
                 roads.add((x, y))
 
     protected = set()
+    protected.update((x, y) for x in range(58, 71) for y in range(82, 91))
     for x, y in walls | roads:
         for dy in range(-2, 3):
             for dx in range(-2, 3):
@@ -102,6 +103,10 @@ def main():
         objects.append({"id": object_id, "name": name, "type": "monster_area", "class": "monster_area",
                         "x": x * TILE_SIZE, "y": (HEIGHT - y - 16) * TILE_SIZE, "width": 16 * TILE_SIZE,
                         "height": 16 * TILE_SIZE, "rotation": 0, "visible": True})
+    objects.append({"id": 4, "name": "meadow_n", "type": "monster_area", "class": "monster_area",
+                    "x": 58 * TILE_SIZE, "y": (HEIGHT - 91) * TILE_SIZE,
+                    "width": 13 * TILE_SIZE, "height": 9 * TILE_SIZE,
+                    "rotation": 0, "visible": True})
     # 上面按 grid 坐标（y 朝上）生成；Tiled 的行从上往下数，写文件时翻转行号。
     def tiled_rows(data):
         return [data[(HEIGHT - 1 - row) * WIDTH + x] for row in range(HEIGHT) for x in range(WIDTH)]
@@ -118,7 +123,7 @@ def main():
                          for tile_id, color in enumerate(COLORS)]}
     tiled_map = {"type": "map", "version": "1.10", "tiledversion": "1.10.2", "orientation": "orthogonal",
                  "renderorder": "right-down", "width": WIDTH, "height": HEIGHT, "tilewidth": TILE_SIZE,
-                 "tileheight": TILE_SIZE, "infinite": False, "nextlayerid": 4, "nextobjectid": 4,
+                 "tileheight": TILE_SIZE, "infinite": False, "nextlayerid": 4, "nextobjectid": 5,
                  "layers": layers, "tilesets": [tileset]}
     destination = Path(__file__).resolve().parents[1] / "Assets/GameRes/Map"
     destination.mkdir(parents=True, exist_ok=True)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace ET
@@ -7,5 +8,6 @@ namespace ET
     {
         public int2 Spawn;
         public int[] CellColors;
+        public List<LegendMonsterArea> MonsterAreas;
     }
 }

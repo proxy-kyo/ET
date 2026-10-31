@@ -12,6 +12,7 @@ namespace ET.Client
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<ObjectWait>();
             root.AddComponent<PlayerComponent>();
+            root.AddComponent<LegendClientActionComponent>();
             root.AddComponent<CurrentScenesComponent>();
             root.AddComponent<LegendSceneMessagesComponent>();
             await EventSystem.Instance.PublishAsync(root, new LegendClientInitFinish());

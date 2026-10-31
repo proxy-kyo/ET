@@ -51,7 +51,10 @@ namespace ET.Client
             }
             self.Camera.transform.position = unit.GetComponent<LegendUnitViewComponent>().Transform.position
                     - self.Camera.transform.forward * 30;
-            if (!Input.GetMouseButtonDown(0) ||
+            // 左键攻击，右键移动；同一帧都按下时右键优先，移动还会取消正在走过去的攻击。
+            bool move = Input.GetMouseButtonDown(1);
+            bool attack = !move && Input.GetMouseButtonDown(0);
+            if (!attack && !move ||
                 !self.GroundCollider.Raycast(self.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 1000))
             {
                 return;
@@ -60,6 +63,18 @@ namespace ET.Client
             int2 cell = GridHelper.WorldToCell(map, hit.point);
             if (!GridHelper.InBounds(map, cell))
             {
+                return;
+            }
+            if (attack)
+            {
+                foreach (Unit target in self.Scene().GetComponent<UnitComponent>().Children.Values)
+                {
+                    if (target.Id != unit.Id && GridHelper.WorldToCell(map, target.Position).Equals(cell))
+                    {
+                        LegendAttackHelper.Attack(self.Root(), target.Id).Coroutine();
+                        return;
+                    }
+                }
                 return;
             }
             // ponytail: 不做本机预测，收到服务端步进后再插值。

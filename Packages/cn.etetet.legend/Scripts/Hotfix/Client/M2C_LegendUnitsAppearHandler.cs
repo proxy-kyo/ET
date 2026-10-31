@@ -17,6 +17,9 @@ namespace ET.Client
                 }
                 Unit unit = units.AddChildWithId<Unit, int>(info.UnitId, info.ConfigId);
                 units.Add(unit);
+                NumericComponent numeric = unit.AddComponent<NumericComponent>();
+                numeric.SetNoEvent(NumericType.MaxHP, info.MaxHp);
+                numeric.SetNoEvent(NumericType.HP, info.Hp);
                 unit.Position = GridHelper.CellToWorld(map, new int2(info.X, info.Y));
                 LegendUnitMoveComponent move = unit.AddComponent<LegendUnitMoveComponent>();
                 move.StartPos = unit.Position;

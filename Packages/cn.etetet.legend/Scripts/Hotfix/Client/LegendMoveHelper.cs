@@ -6,6 +6,12 @@ namespace ET.Client
     {
         public static void MoveTo(Scene root, int2 cell)
         {
+            ++root.GetComponent<LegendClientActionComponent>().ActionId;
+            Send(root, cell);
+        }
+
+        public static void Send(Scene root, int2 cell)
+        {
             LegendCliClientComponent client = root.GetComponent<LegendCliClientComponent>();
             if (client != null)
             {

@@ -43,6 +43,27 @@ namespace ET
             LegendMapComponent map = scene.AddComponent<LegendMapComponent>();
             // Tiled 的行从上往下数，grid 的 y 朝上，读取时翻转行号，游戏里的朝向才和 Tiled 里一致。
             map.Spawn = new int2((int)(spawn["x"].ToDouble() / tileWidth), height - 1 - (int)(spawn["y"].ToDouble() / tileWidth));
+            map.MonsterAreas = new List<LegendMonsterArea>();
+            foreach (BsonValue obj in layers.Single(layer => layer["name"].AsString == "objects")["objects"].AsBsonArray)
+            {
+                BsonDocument area = obj.AsBsonDocument;
+                bool isMonsterArea = (area.TryGetValue("class", out BsonValue objectClass) && objectClass.AsString == "monster_area") ||
+                                     (area.TryGetValue("type", out BsonValue objectType) && objectType.AsString == "monster_area");
+                if (!isMonsterArea)
+                {
+                    continue;
+                }
+                int x = (int)(area["x"].ToDouble() / tileWidth);
+                int top = (int)(area["y"].ToDouble() / tileWidth);
+                int columns = (int)(area["width"].ToDouble() / tileWidth);
+                int rows = (int)(area["height"].ToDouble() / tileWidth);
+                map.MonsterAreas.Add(new LegendMonsterArea
+                {
+                    Name = area["name"].AsString,
+                    Min = new int2(x, height - top - rows),
+                    Max = new int2(x + columns - 1, height - top - 1),
+                });
+            }
             map.CellColors = new int[ground.Count];
             for (int i = 0; i < ground.Count; ++i)
             {

@@ -15,6 +15,13 @@ namespace ET.Server
             root.AddComponent<AOIManagerComponent>();
             LegendMapHelper.Load(root, LegendMapName.First);
             root.AddComponent<GridOccupancyComponent>();
+            for (int i = 0; i < root.GetComponent<LegendMapComponent>().MonsterAreas.Count; ++i)
+            {
+                for (int count = 0; count < LegendCombatConst.MonstersPerArea; ++count)
+                {
+                    LegendMonsterHelper.Spawn(root, i);
+                }
+            }
             root.AddComponent<LocationProxyComponent>();
             root.AddComponent<MessageLocationSenderComponent>();
 
