@@ -82,7 +82,7 @@ namespace ET.Client
                     }
                     if (line == null)
                     {
-                        Environment.Exit(0);
+                        await self.Quit(0);
                         return;
                     }
                     line = line.Trim();
@@ -93,7 +93,9 @@ namespace ET.Client
                     bool success = await self.Execute(line);
                     if (!success && redirected)
                     {
-                        Environment.Exit(1);
+                        self = selfRef;
+                        await self.Quit(1);
+                        return;
                     }
                 }
                 catch (OperationCanceledException)
@@ -105,10 +107,23 @@ namespace ET.Client
                     Console.WriteLine($"error: {e.Message}");
                     if (redirected)
                     {
-                        Environment.Exit(1);
+                        self = selfRef;
+                        await self.Quit(1);
+                        return;
                     }
                 }
             }
+        }
+
+        // 先移除客户端纤程，KCP 通道关闭时会给 Gate 发 FIN；直接退出要等服务端空闲超时（DEBUG 400 秒）才发现断线。
+        private static async ETTask Quit(this LegendCliComponent self, int exitCode)
+        {
+            EntityRef<LegendCliComponent> selfRef = self;
+            await self.Fiber().RemoveFibers();
+            self = selfRef;
+            // ponytail: NetClient 纤程在自己的线程上异步关通道，固定等 500 毫秒让 FIN 发出去。
+            await self.Root().TimerComponent.WaitAsync(500);
+            Environment.Exit(exitCode);
         }
 
         private static async ETTask<bool> Execute(this LegendCliComponent self, string line)

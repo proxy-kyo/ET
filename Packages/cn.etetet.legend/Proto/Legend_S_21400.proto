@@ -18,3 +18,8 @@ message M2G_LegendEnterMap // IResponse
     int64 UnitId = 4;
     int64 MapSceneId = 5;
 }
+
+message G2M_LegendLeaveMap // IMessage
+{
+    int64 PlayerId = 1;
+}

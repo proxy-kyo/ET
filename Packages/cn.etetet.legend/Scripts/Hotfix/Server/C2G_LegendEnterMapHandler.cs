@@ -36,6 +36,10 @@ namespace ET.Server
             G2M_LegendEnterMap enterMap = G2M_LegendEnterMap.Create();
             enterMap.PlayerId = player.Id;
             enterMap.GateActorId = player.GetComponent<PlayerSessionComponent>().GetActorId();
+            // 进图前记下地图：Call 还没返回就断线时，离开消息排在进图之后，Map 先进后删，不会留下幽灵 Unit。
+            LegendPlayerMapComponent playerMap = player.GetComponent<LegendPlayerMapComponent>() ??
+                    player.AddComponent<LegendPlayerMapComponent>();
+            playerMap.MapActorId = mapActorId;
             using M2G_LegendEnterMap result = (M2G_LegendEnterMap)await root.GetComponent<MessageSender>().Call(mapActorId, enterMap, false);
             response.Error = result.Error;
             response.Message = result.Message;

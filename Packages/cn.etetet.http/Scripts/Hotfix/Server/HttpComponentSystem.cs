@@ -27,9 +27,14 @@ namespace ET.Server
 
                 self.Accept().Coroutine();
             }
-            catch (HttpListenerException e)
+            catch (HttpListenerException e) when (e.ErrorCode == 5)
             {
                 throw new Exception($"请先在cmd中运行: netsh http add urlacl url=http://*:你的address中的端口/ user=Everyone, address: {address}", e);
+            }
+            catch (HttpListenerException e)
+            {
+                // 32/183: 端口已被占用，常见是 Unity 正在 Play，里面跑着同一套服务端。
+                throw new Exception($"http 监听失败（端口被占用？）: {address}", e);
             }
         }
         

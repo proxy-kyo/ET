@@ -50,9 +50,27 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(Opcode.G2M_LegendLeaveMap)]
+    public partial class G2M_LegendLeaveMap : MessageObject, IMessage
+    {
+        public static G2M_LegendLeaveMap Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<G2M_LegendLeaveMap>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+        public override void Dispose()
+        {
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static partial class Opcode
     {
         public const ushort G2M_LegendEnterMap = 21401;
         public const ushort M2G_LegendEnterMap = 21402;
+        public const ushort G2M_LegendLeaveMap = 21403;
     }
 }

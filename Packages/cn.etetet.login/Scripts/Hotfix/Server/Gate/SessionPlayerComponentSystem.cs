@@ -7,7 +7,7 @@
         private static void Destroy(this SessionPlayerComponent self)
         {
             Scene root = self.Root();
-            if (root== null)
+            if (root == null || root.IsDisposed)
             {
                 return;
             }
@@ -22,6 +22,7 @@
                 player.GetComponent<WaitLogoutComponent>() == null)
             {
                 player.AddComponent<WaitLogoutComponent>();
+                EventSystem.Instance.Publish(root, new PlayerOffline { Player = player });
             }
         }
         
